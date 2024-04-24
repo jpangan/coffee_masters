@@ -142,9 +142,8 @@ class Home2 extends StatelessWidget {
             right: true,
             top: true,
             bottom: true,
-            minimum: EdgeInsets.all(16),
-            child:
-                HelloWorldList(title: 'Hello world', occurrence: 100000000)));
+            minimum: EdgeInsets.fromLTRB(8, 8, 8, 8),
+            child: HelloWorldList(title: 'Hello world', occurrence: 100000)));
   }
 }
 
@@ -159,20 +158,55 @@ class HelloWorldList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: occurrence,
-        itemBuilder: (context, index) {
-          int idx = index + 1;
-          return Container(
-              child: Text(
-            '$title $idx',
-            style: const TextStyle(
-                color: Colors.blueGrey,
-                fontSize: 12,
-                fontWeight: FontWeight.normal),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ));
-        });
+    return GridView.count(
+        crossAxisCount: 2,
+        children: List.generate(occurrence, (index) {
+          return Card(
+            color: Colors.amber[50],
+            elevation: 0,
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: ListItem(title: title, index: index),
+            ),
+          );
+        }));
+  }
+}
+
+class ListItem extends StatelessWidget {
+  const ListItem({
+    super.key,
+    required this.title,
+    required this.index,
+  });
+
+  final String title;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return StyledText(title: title, index: index);
+  }
+}
+
+class StyledText extends StatelessWidget {
+  const StyledText({
+    super.key,
+    required this.title,
+    required this.index,
+  });
+
+  final String title;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      '$title $index',
+      style: const TextStyle(
+          color: Colors.blueGrey, fontSize: 12, fontWeight: FontWeight.normal),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+    );
   }
 }
