@@ -1,11 +1,7 @@
-import 'dart:ffi';
-import 'dart:ui';
+import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/svg.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Coffee Masters',
         theme: ThemeData(
           // This is the theme of your application.
           //
@@ -130,6 +126,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+String pickRandomImage(List<String> strings) {
+  if (strings.isEmpty) {
+    throw ArgumentError("The list of strings cannot be empty.");
+  }
+  final random = Random();
+  final index = random.nextInt(strings.length);
+  return strings[index];
+}
+
 class Home2 extends StatelessWidget {
   const Home2({super.key});
 
@@ -151,6 +156,7 @@ class HelloWorldList extends StatelessWidget {
   //Properties
   final String title;
   final int occurrence;
+
   // Constructor
 
   const HelloWorldList(
@@ -158,6 +164,14 @@ class HelloWorldList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = [
+      "assets/images/svg/bag.svg",
+      "assets/images/svg/beans.svg",
+      "assets/images/svg/coffee.svg",
+      "assets/images/svg/cup.svg",
+      "assets/images/svg/cup2.svg"
+    ];
+
     return GridView.count(
         crossAxisCount: 2,
         children: List.generate(occurrence, (index) {
@@ -166,7 +180,9 @@ class HelloWorldList extends StatelessWidget {
             elevation: 0,
             child: Padding(
               padding: const EdgeInsets.all(8),
-              child: ListItem(title: title, index: index),
+              child: SvgImage(
+                imgSrc: pickRandomImage(strings),
+              ),
             ),
           );
         }));
@@ -186,6 +202,20 @@ class ListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StyledText(title: title, index: index);
+  }
+}
+
+class SvgImage extends StatelessWidget {
+  const SvgImage({
+    super.key,
+    required this.imgSrc,
+  });
+
+  final String imgSrc;
+
+  @override
+  Widget build(BuildContext context) {
+    return SvgPicture.asset(imgSrc, width: 100, height: 100);
   }
 }
 
